@@ -1,0 +1,387 @@
+[
+  {
+    "guid": "c0492467-6226-46fa-a308-8b37090d54e8",
+    "filename": "inventory/Get-HardwareSummary.ps1",
+    "name": "Inventory - Hardware summary",
+    "description": "Short hardware report (model, serial, BIOS, CPU, RAM, disks with media type, TPM and OS build); inventory action that changes nothing and exits 0.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "a356201b-3e9d-4328-b8e6-717d104c6162",
+    "filename": "inventory/Get-InstalledSoftware.ps1",
+    "name": "Inventory - Installed software",
+    "description": "Lists machine-wide installed programs from the Uninstall registry keys (name, version, publisher, install date); as a check with -NameFilter it exits 1 when nothing matches, otherwise 0.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [
+      "-NameFilter '*'"
+    ],
+    "env": [],
+    "syntax": "[-NameFilter <string>] [-MaxItems <int>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "d10f8412-db2d-4051-b27f-977f781c29fa",
+    "filename": "inventory/Get-UptimePendingReboot.ps1",
+    "name": "Inventory - Uptime and pending reboot",
+    "description": "Reports last boot, uptime and pending reboot reasons; check exits 2 when a reboot is pending or uptime exceeds -MaxUptimeDays, otherwise 0.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [
+      "-MaxUptimeDays 30"
+    ],
+    "env": [],
+    "syntax": "[-MaxUptimeDays <int>]",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "c7ae25c4-4a3e-4642-8607-cbddd62a3e5e",
+    "filename": "inventory/Get-WindowsActivation.ps1",
+    "name": "Inventory - Windows activation",
+    "description": "Checks the Windows license status, channel and last 5 characters of the product key; check exits 0 licensed, 2 grace or notification, 1 unlicensed.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "66133397-fe41-4c4a-ace0-274313e4db1b",
+    "filename": "cleanup/Clear-TempFiles.ps1",
+    "name": "Cleanup - Clear temporary files",
+    "description": "Reports (default dry run) or deletes with -DryRun:$false temp files older than -OlderThanDays in Windows, user, Windows Update and error reporting folders, optionally the recycle bin; action that exits 0, or 1 on error.",
+    "shell": "powershell",
+    "category": "Cleanup",
+    "args": [
+      "-OlderThanDays 7"
+    ],
+    "env": [],
+    "syntax": "[-OlderThanDays <int>] [-IncludeRecycleBin] [-DryRun:$false]",
+    "default_timeout": 600,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "64a7ad23-b2b6-4a10-8ba4-c48226efc786",
+    "filename": "cleanup/Test-DiskFreeSpace.ps1",
+    "name": "Cleanup - Disk free space",
+    "description": "Checks free space on local fixed drives; check exits 1 when a drive is below both -MinFreePercent and -MinFreeGB, 2 when below one of them, 3 when -Drive does not exist, otherwise 0.",
+    "shell": "powershell",
+    "category": "Cleanup",
+    "args": [
+      "-MinFreePercent 10",
+      "-MinFreeGB 10"
+    ],
+    "env": [],
+    "syntax": "[-Drive <letter>] [-MinFreePercent <int>] [-MinFreeGB <int>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "ba9b9aad-1b25-48c5-b417-441b6ab6846e",
+    "filename": "windows-update/Test-WindowsUpdateHealth.ps1",
+    "name": "Windows Update - Health check",
+    "description": "Check of the local Windows Update client (services, last successful scan and install, SoftwareDistribution size, pending reboot, WSUS policy yes/no); exit 0 OK, 1 FAIL, 2 WARN.",
+    "shell": "powershell",
+    "category": "Windows Update",
+    "args": [],
+    "env": [],
+    "syntax": "[-MaxScanAgeDays <int>] [-MaxInstallAgeDays <int>] [-MaxFolderSizeGB <double>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "653da36b-2611-4d3b-8181-68373b3e02bb",
+    "filename": "windows-update/Test-LastUpdateInstall.ps1",
+    "name": "Windows Update - Last install age",
+    "description": "Check of the days since the last successful update install (definition updates ignored), optionally counting pending updates with -IncludePending (slow); exit 0 OK, 1 FAIL over MaxDays, 2 WARN over 75% of MaxDays.",
+    "shell": "powershell",
+    "category": "Windows Update",
+    "args": [
+      "-MaxDays 35"
+    ],
+    "env": [],
+    "syntax": "[-MaxDays <int>] [-IncludePending] [-IncludeDefinitionUpdates]",
+    "default_timeout": 600,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "6ceb6461-4a64-4df2-b845-43a263abfbd3",
+    "filename": "windows-update/Reset-WindowsUpdateComponents.ps1",
+    "name": "Windows Update - Reset components",
+    "description": "Action that stops the update services, renames SoftwareDistribution and catroot2 to a dated backup (keeping only the newest) and starts the services again; dry run by default, pass -DryRun:$false to apply.",
+    "shell": "powershell",
+    "category": "Windows Update",
+    "args": [],
+    "env": [],
+    "syntax": "[-DryRun:$false] [-ServiceTimeoutSeconds <int>]",
+    "default_timeout": 600,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "94343065-0a30-4617-8759-a28c55fcc5bb",
+    "filename": "bitlocker/Test-BitLockerRecoveryKey.ps1",
+    "name": "BitLocker - Recovery key backup",
+    "description": "Check that the OS volume has a BitLocker recovery password and that its backup to AD DS or Entra ID is recorded in the event log, never printing the key; exit 0 OK, 1 FAIL no recovery password, 2 WARN no backup evidence, 3 not applicable.",
+    "shell": "powershell",
+    "category": "BitLocker",
+    "args": [],
+    "env": [],
+    "syntax": "[-LookbackDays <int>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "05ac476b-74f1-465a-9488-fb5d1df051af",
+    "filename": "bitlocker/Test-TpmSecureBoot.ps1",
+    "name": "BitLocker - TPM and Secure Boot",
+    "description": "Check of TPM 2.0 readiness, firmware type and Secure Boot; exit 0 OK, 1 FAIL no ready TPM 2.0 or Secure Boot off on UEFI, 2 WARN legacy BIOS with TPM 2.0, 3 legacy BIOS without TPM.",
+    "shell": "powershell",
+    "category": "BitLocker",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e8887da9-3605-4005-a4bc-1520ae86b2ac",
+    "filename": "bitlocker/Get-BitLockerStatus.ps1",
+    "name": "BitLocker - Volume status",
+    "description": "Check of BitLocker on every fixed volume (protection, conversion, method, protector types, never keys); exit 0 OK, 1 FAIL when the OS volume is unprotected, 2 WARN for data volumes or encryption in progress, 3 not available.",
+    "shell": "powershell",
+    "category": "BitLocker",
+    "args": [],
+    "env": [],
+    "syntax": "[-RequireOsVolumeOnly:$false]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e04da0af-997b-4b04-8c38-f806f320a16b",
+    "filename": "defender/Test-DefenderStatus.ps1",
+    "name": "Defender - Protection status",
+    "description": "Check of Microsoft Defender service, antivirus, real-time and tamper protection, running mode and signature age; exit 0 OK, 1 FAIL protection off, 2 WARN stale signatures or tamper protection off, 3 Defender not available.",
+    "shell": "powershell",
+    "category": "Defender",
+    "args": [],
+    "env": [],
+    "syntax": "[-MaxSignatureAgeDays <int>] [-AllowPassive]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "39fd4124-d357-41cc-876b-4019a30096e4",
+    "filename": "defender/Get-DefenderDetections.ps1",
+    "name": "Defender - Recent detections",
+    "description": "Check that lists recent Microsoft Defender detections (time, threat, severity, status, truncated path); exit 0 none or all remediated, 1 not readable, 2 active detection, 3 Defender not available.",
+    "shell": "powershell",
+    "category": "Defender",
+    "args": [
+      "-Days 7"
+    ],
+    "env": [],
+    "syntax": "[-Days <int>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "2c23af3c-230b-4a5d-8925-3ed3854148df",
+    "filename": "defender/Update-DefenderAndScan.ps1",
+    "name": "Defender - Update and scan",
+    "description": "Action that updates Microsoft Defender signatures and runs a quick or full scan, reporting versions and new detections; raise the timeout to 3600 for a full scan; exit 0 OK, 1 scan failed or threat not remediated, 2 update failed or threats remediated, 3 not available.",
+    "shell": "powershell",
+    "category": "Defender",
+    "args": [
+      "-ScanType Quick"
+    ],
+    "env": [],
+    "syntax": "[-ScanType <Quick|Full|None>]",
+    "default_timeout": 1800,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "b129b67b-0037-4f3c-bb8d-a7d6a3e343d3",
+    "filename": "network/Get-ListeningPorts.ps1",
+    "name": "Network - Listening ports",
+    "description": "Lists listening TCP (and optionally UDP) ports with owning process and services; as a check, exits 1 when a port given in -AlertOnPort listens on a non-loopback address, else 0.",
+    "shell": "powershell",
+    "category": "Network",
+    "args": [],
+    "env": [],
+    "syntax": "[-IncludeUdp] [-AlertOnPort <int[]>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e3a123df-89a9-4905-8d70-9f938bc4705b",
+    "filename": "network/Reset-NetworkStack.ps1",
+    "name": "Network - Reset network stack",
+    "description": "Action that flushes the DNS cache and optionally resets Winsock and TCP/IP, defaulting to a dry run and rebooting only with -AllowReboot; exits 2 when a reboot is still required, 1 on error.",
+    "shell": "powershell",
+    "category": "Network",
+    "args": [],
+    "env": [],
+    "syntax": "[-ResetWinsock] [-ResetTcpIp] [-AllowReboot] [-DryRun:$false]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "d3b7cd54-562d-4b8c-ba65-2a9d6dc230b5",
+    "filename": "network/Test-NetworkConnectivity.ps1",
+    "name": "Network - Test connectivity",
+    "description": "Check of active adapters, gateway ping, DNS resolution and a TCP connection with latency; exits 1 on no adapter, DNS or TCP failure, 2 when the gateway does not answer ping, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Network",
+    "args": [],
+    "env": [],
+    "syntax": "[-DnsName <string>] [-Target <string>] [-Port <int>] [-TimeoutMs <int>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "88daaf46-ca57-4f3a-9141-6a2e8139d2ac",
+    "filename": "security/Test-FirewallProfiles.ps1",
+    "name": "Security - Firewall profiles",
+    "description": "Check of the Windows Firewall Domain, Private and Public profiles; exits 1 when a profile is disabled, 2 when inbound default is Allow or a disabled profile is covered by a third-party firewall, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-Profiles <Domain|Private|Public[]>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "a9f8d3d0-f497-4810-ac62-78ab4d7d18d3",
+    "filename": "security/Get-LocalAdministrators.ps1",
+    "name": "Security - Local administrators",
+    "description": "Lists members of the local Administrators group (found by SID, any language) with type and source; as a check with -Allowed, exits 1 when a member matches no allowed pattern, else 0.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-Allowed <string[]>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "cead6105-d0b4-470a-9c7f-f1108a22aa52",
+    "filename": "security/Test-RdpSecurity.ps1",
+    "name": "Security - RDP security",
+    "description": "Check of Remote Desktop settings (NLA, security layer, port, firewall profiles); exits 3 when RDP is disabled, 1 when enabled without NLA, 2 when open on the Public profile or using legacy RDP encryption, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "9d5800f9-ff6c-48b4-9338-942dab981a7d",
+    "filename": "security/Test-SMBv1Disabled.ps1",
+    "name": "Security - SMBv1 disabled",
+    "description": "Check that SMBv1 is disabled; exits 1 when the SMBv1 server is enabled or its state cannot be read, 2 when only the SMBv1 client is enabled, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "ba2725b8-7a9b-42fc-bd9f-77cd616f6037",
+    "filename": "services/Test-ServiceRunning.ps1",
+    "name": "Services - Service running",
+    "description": "Checks that the services named in -Name are running, optionally starting them with -Restart; check exits 0 all running, 1 any not running, 3 service does not exist.",
+    "shell": "powershell",
+    "category": "Services",
+    "args": [
+      "-Name Winmgmt"
+    ],
+    "env": [],
+    "syntax": "-Name <service[,service]> [-Restart]",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  }
+]
