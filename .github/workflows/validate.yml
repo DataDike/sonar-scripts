@@ -1,0 +1,24 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PSScriptAnalyzer
+        shell: powershell
+        run: |
+          Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+          Install-Module PSScriptAnalyzer -Scope CurrentUser -Force -RequiredVersion 1.23.0
+      - name: Validate library (Windows PowerShell 5.1)
+        shell: powershell
+        run: powershell -NoProfile -ExecutionPolicy Bypass -File tools/validate.ps1
