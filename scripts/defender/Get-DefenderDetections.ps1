@@ -65,7 +65,7 @@ try {
     if (-not (Get-Command -Name Get-MpThreatDetection -ErrorAction SilentlyContinue) -or
         -not (Get-Service -Name WinDefend -ErrorAction SilentlyContinue)) {
         Write-Output 'INFO: Microsoft Defender is not available on this machine (not applicable)'
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
 
     $since = (Get-Date).AddDays(-1 * [math]::Abs($Days))
@@ -74,14 +74,14 @@ try {
     } catch {
         $m = $_.Exception.Message
         if ($m -match 'No MSFT_MpThreatDetection|not found') { $all = @() }
-        else { Write-Output ('FAIL: cannot read Defender detections: ' + (Get-ShortText $m 200)); exit 1 }
+        else { Write-Output ('FAIL: cannot read Defender detections: ' + (Get-ShortText $m 200)); $host.SetShouldExit(1); exit 1 }
     }
     $recent = @($all | Where-Object { $_.InitialDetectionTime -and $_.InitialDetectionTime -ge $since } |
                 Sort-Object -Property InitialDetectionTime -Descending)
 
     if ($recent.Count -eq 0) {
         Write-Output ("OK: no Defender detection in the last {0} days" -f $Days)
-        exit 0
+        $host.SetShouldExit(0); exit 0
     }
 
     $threats = @{}
@@ -122,4 +122,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

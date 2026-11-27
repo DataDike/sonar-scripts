@@ -189,4 +189,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

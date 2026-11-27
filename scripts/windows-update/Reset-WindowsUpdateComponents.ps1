@@ -102,7 +102,7 @@ try {
         }
         Write-Output 'OK: dry run completed, no changes made'
         $lines | ForEach-Object { Write-Output $_ }
-        exit 0
+        $host.SetShouldExit(0); exit 0
     }
 
     if (-not $isAdmin) { throw 'administrator rights are required to reset Windows Update components' }
@@ -186,4 +186,4 @@ catch {
     $lines | ForEach-Object { Write-Output $_ }
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

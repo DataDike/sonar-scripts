@@ -88,7 +88,7 @@ try {
             else { Write-Line 'INFO: a reboot would be required afterwards (pass -AllowReboot to reboot automatically)' }
         }
         Write-Line 'INFO: pass -DryRun:$false to apply'
-        exit 0
+        $host.SetShouldExit(0); exit 0
     }
 
     $sys32 = Join-Path $env:SystemRoot 'System32'
@@ -126,4 +126,4 @@ catch {
     Write-Line ('FAIL: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

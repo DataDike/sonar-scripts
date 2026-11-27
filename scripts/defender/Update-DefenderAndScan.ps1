@@ -67,11 +67,11 @@ try {
     if (-not (Get-Command -Name Update-MpSignature -ErrorAction SilentlyContinue) -or
         -not (Get-Service -Name WinDefend -ErrorAction SilentlyContinue)) {
         Write-Output 'INFO: Microsoft Defender is not available on this machine (not applicable)'
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
     try { $before = Get-MpComputerStatus -ErrorAction Stop } catch {
         Write-Output ('INFO: Microsoft Defender is not active: ' + (Get-ShortText $_.Exception.Message 150))
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
 
     # 1. Signature update
@@ -139,4 +139,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

@@ -10,13 +10,16 @@ The scripts are plain PowerShell and work on their own too: read them, run them,
 
 | Category | Examples |
 |----------|----------|
-| Inventory | hardware summary, installed software, Windows activation, uptime and pending reboot |
-| Cleanup | temp files and update cache (dry run by default), free disk space check |
+| Inventory | hardware summary, installed software, Windows activation, uptime and pending reboot, monitors, printers, Microsoft Office, startup programs, user profiles, logged-on users |
+| Hardware | disk health (SMART, temperature, wear), battery wear |
+| Cleanup | temp files and update cache, browser cache (dry run by default), free disk space check |
+| Maintenance | system file repair (DISM and SFC), print queue, time synchronization |
+| Troubleshooting | crashes and unexpected shutdowns, event log errors |
 | Windows Update | update health, days since last install, component reset |
 | BitLocker | volume status, recovery key present and backed up, TPM and Secure Boot |
 | Defender | protection status, signature update and scan, recent detections |
-| Network | connectivity diagnostics, network stack reset, listening ports |
-| Security | local administrators, firewall profiles, SMBv1, RDP security |
+| Network | connectivity diagnostics, network stack reset, listening ports, Wi-Fi status |
+| Security | hardening baseline, failed logons, local accounts, expiring certificates, suspicious scheduled tasks, browser extensions, domain and Entra join, local administrators, firewall profiles, SMBv1, RDP security |
 | Services | service running (optional start) |
 
 The full list, with arguments and defaults, is in [`sonar_scripts.json`](sonar_scripts.json).

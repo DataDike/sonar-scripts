@@ -65,11 +65,11 @@ try {
     $names = @($Name -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ } | Select-Object -Unique)
     if ($names.Count -eq 0) {
         Write-Output "FAIL: -Name is required (service name, comma-separated for several)"
-        exit 1
+        $host.SetShouldExit(1); exit 1
     }
     if (@($names | Where-Object { $_ -match '[\*\?\[\]]' }).Count -gt 0) {
         Write-Output "FAIL: wildcards are not accepted in -Name"
-        exit 1
+        $host.SetShouldExit(1); exit 1
     }
 
     $running = 0; $failed = 0; $missing = 0
@@ -119,4 +119,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

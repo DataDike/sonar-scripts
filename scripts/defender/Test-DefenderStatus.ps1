@@ -61,19 +61,19 @@ $exitCode = 0
 try {
     if (-not (Get-Command -Name Get-MpComputerStatus -ErrorAction SilentlyContinue)) {
         Write-Output 'INFO: Microsoft Defender cmdlets are not available (not applicable)'
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
     $svc = Get-Service -Name WinDefend -ErrorAction SilentlyContinue
     if (-not $svc) {
         Write-Output 'INFO: Microsoft Defender service (WinDefend) is not installed (not applicable)'
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
     try {
         $st = Get-MpComputerStatus -ErrorAction Stop
     } catch {
         if ($svc.Status -ne 'Running') {
             Write-Output ('INFO: Microsoft Defender is not running (service {0}); probably replaced by another antivirus' -f $svc.Status)
-            exit 3
+            $host.SetShouldExit(3); exit 3
         }
         throw
     }
@@ -125,4 +125,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

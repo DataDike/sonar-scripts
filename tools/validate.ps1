@@ -100,7 +100,13 @@ foreach ($e in $entries) {
         foreach ($tag in '.SYNOPSIS', '.DESCRIPTION', '.NOTES', '.LINK') { if ($text -notmatch [regex]::Escape($tag)) { Add-Err "$id : header missing $tag" } }
         if ($text -notmatch ('GUID:\s+' + [regex]::Escape([string]$e.guid))) { Add-Err "$id : header GUID differs from manifest" }
         if ($text -notmatch 'Version:\s+\d+\.\d+\.\d+') { Add-Err "$id : header missing semver Version" }
-        if ($text -notmatch '(?m)^\s*exit\s') { Add-Err "$id : script must end with an explicit exit code" }
+        if ($text -notmatch '(?m)(^|[;{]\s*)exit\s') { Add-Err "$id : script must end with an explicit exit code" }
+        # the agent runs scripts without -File: a plain 'exit 2' reaches the console as 1
+        foreach ($ln in ($text -split "`r?`n")) {
+            if ($ln -match '(^|[;{]\s*)exit\s+\S' -and $ln -notmatch '^\s*#' -and $ln -notmatch 'SetShouldExit') {
+                Add-Err "$id : use '`$host.SetShouldExit(N); exit N' (plain exit loses codes 2/3): $($ln.Trim())"; break
+            }
+        }
         if ($text -match '(?i)Remove-Item|Clear-RecycleBin|Reset-|netsh\s+winsock\s+reset|Stop-Service|Set-Service') {
             if ($text -notmatch '\[switch\]\$DryRun') { Add-Err "$id : changes the system but has no -DryRun switch" }
         }

@@ -177,4 +177,4 @@ catch {
     Write-Line ('FAIL: could not read local Administrators: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

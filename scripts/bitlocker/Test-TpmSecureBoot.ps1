@@ -118,7 +118,7 @@ try {
         if ($tpmAbsent) {
             Write-Output 'INFO: legacy BIOS without TPM: hardware cannot meet TPM 2.0 / Secure Boot (not applicable)'
             $lines | ForEach-Object { Write-Output $_ }
-            exit 3
+            $host.SetShouldExit(3); exit 3
         }
     } elseif ($null -eq $secureBoot) {
         $lines.Add('INFO: Secure Boot state unknown (not readable)')
@@ -146,4 +146,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

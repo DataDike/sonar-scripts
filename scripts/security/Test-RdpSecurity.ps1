@@ -66,7 +66,7 @@ try {
     $deny = Get-EffectiveValue 'fDenyTSConnections' $tsKey 1
     if ([int]$deny.Value -ne 0) {
         Write-Line ('OK: Remote Desktop is disabled (fDenyTSConnections={0}, {1}); not applicable' -f $deny.Value, $deny.Source)
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
 
     $nla = Get-EffectiveValue 'UserAuthentication' $rdpKey 1
@@ -122,4 +122,4 @@ catch {
     Write-Line ('FAIL: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

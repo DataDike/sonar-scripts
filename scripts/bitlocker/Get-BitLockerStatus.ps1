@@ -73,11 +73,11 @@ try {
         if ($_.Exception.PSObject.Properties['NativeErrorCode']) { $code = [string]$_.Exception.NativeErrorCode }
         if ($code -match 'InvalidNamespace|InvalidClass' -or $msg -match 'Invalid namespace|Invalid class') {
             Write-Output 'INFO: BitLocker is not available on this system (no BitLocker WMI provider, e.g. Home edition)'
-            exit 3
+            $host.SetShouldExit(3); exit 3
         }
         if ($code -match 'AccessDenied' -or $msg -match 'Access (is )?denied') {
             Write-Output 'FAIL: access denied reading BitLocker status; run as SYSTEM or administrator'
-            exit 1
+            $host.SetShouldExit(1); exit 1
         }
         throw
     }
@@ -86,7 +86,7 @@ try {
     $fixed = @($volumes | Where-Object { $_.VolumeType -eq 0 -or $_.VolumeType -eq 1 })
     if ($fixed.Count -eq 0) {
         Write-Output 'INFO: no fixed volume reported by BitLocker'
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
 
     $osProtected = $null
@@ -133,4 +133,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

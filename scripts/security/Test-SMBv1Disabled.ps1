@@ -108,4 +108,4 @@ catch {
     Write-Line ('FAIL: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

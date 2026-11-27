@@ -34,6 +34,88 @@
     "run_as_user": false
   },
   {
+    "guid": "01ac77fd-4c67-4b37-b3a1-f7c487565f19",
+    "filename": "inventory/Get-LoggedOnUsers.ps1",
+    "name": "Inventory - Logged-on users",
+    "description": "Lists interactive and remote desktop sessions (user, state, idle time, logon time) and the console user; inventory action that changes nothing and exits 0, also when nobody is logged on.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "ee3d8a6d-95e7-4434-bab2-9a7af2f4fd26",
+    "filename": "inventory/Get-OfficeInfo.ps1",
+    "name": "Inventory - Microsoft Office",
+    "description": "Reports Microsoft Office Click-to-Run version, update channel, products and update settings plus MSI editions, never license keys; inventory action that changes nothing, exits 0, or 3 when Office is not installed.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e2755dbe-4d6d-499c-8594-62599ce3c7db",
+    "filename": "inventory/Get-MonitorInventory.ps1",
+    "name": "Inventory - Monitors",
+    "description": "Lists connected monitors from EDID (manufacturer, model, serial number, year, connection type, size); inventory action that changes nothing, exits 0, or 3 when no monitor is reported.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "a26a59f9-f393-4c17-8c3b-b4d59a17b212",
+    "filename": "inventory/Get-PrinterInventory.ps1",
+    "name": "Inventory - Printers",
+    "description": "Lists machine printers (driver, port, shared, local/network/virtual, status) and the Print Spooler state; inventory action that changes nothing, exits 0, or 3 when the Print Spooler service is absent.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [],
+    "env": [],
+    "syntax": "[-MaxItems <int>]",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "8e724f6a-ea0b-45af-854c-eb18e76a4edc",
+    "filename": "inventory/Get-StartupPrograms.ps1",
+    "name": "Inventory - Startup programs",
+    "description": "Lists auto-start entries (HKLM and loaded user Run/RunOnce keys, Startup folders, logon scheduled tasks) as location, name and command; inventory action that changes nothing and exits 0.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [
+      "-MaxItems 60"
+    ],
+    "env": [],
+    "syntax": "[-MaxItems <int>] [-IncludeMicrosoftTasks]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
     "guid": "d10f8412-db2d-4051-b27f-977f781c29fa",
     "filename": "inventory/Get-UptimePendingReboot.ps1",
     "name": "Inventory - Uptime and pending reboot",
@@ -52,6 +134,25 @@
     "run_as_user": false
   },
   {
+    "guid": "75c95ed7-c8ac-4604-a7fa-35cde704e697",
+    "filename": "inventory/Get-UserProfiles.ps1",
+    "name": "Inventory - User profiles",
+    "description": "Lists local user profiles (account, last use, loaded, folder size within a time budget) and flags stale ones; inventory that deletes nothing and exits 0, or as a check with -WarnOnStale exits 2 when a profile is unused for more than -StaleDays.",
+    "shell": "powershell",
+    "category": "Inventory",
+    "args": [
+      "-StaleDays 90",
+      "-MaxSeconds 120"
+    ],
+    "env": [],
+    "syntax": "[-StaleDays <int>] [-WarnOnStale] [-SkipSize] [-MaxSeconds <int>]",
+    "default_timeout": 300,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
     "guid": "c7ae25c4-4a3e-4642-8607-cbddd62a3e5e",
     "filename": "inventory/Get-WindowsActivation.ps1",
     "name": "Inventory - Windows activation",
@@ -62,6 +163,59 @@
     "env": [],
     "syntax": "",
     "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "9fd1b94f-a2aa-4e34-89f0-23223b57895c",
+    "filename": "hardware/Get-BatteryHealth.ps1",
+    "name": "Hardware - Battery health",
+    "description": "Checks laptop battery wear (full charge vs design capacity) and cycle count from WMI, no report files; check exits 2 when wear is over -MaxWearPercent, 3 when there is no battery, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Hardware",
+    "args": [
+      "-MaxWearPercent 40"
+    ],
+    "env": [],
+    "syntax": "[-MaxWearPercent <int>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "4e184bbf-08e1-414e-8999-69891fbd30fd",
+    "filename": "hardware/Get-DiskHealth.ps1",
+    "name": "Hardware - Disk health",
+    "description": "Checks every physical disk (health status, temperature, wear, uncorrected errors, power-on hours); check exits 1 unhealthy or uncorrected errors, 2 warning or over the temperature/wear limits, 3 no physical disk info, 0 healthy.",
+    "shell": "powershell",
+    "category": "Hardware",
+    "args": [
+      "-MaxTemperature 60",
+      "-MaxWear 80"
+    ],
+    "env": [],
+    "syntax": "[-MaxTemperature <int>] [-MaxWear <int>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "d2eaeb18-8c81-45a9-a5a9-6d55db66a876",
+    "filename": "cleanup/Clear-BrowserCache.ps1",
+    "name": "Cleanup - Browser cache",
+    "description": "Action that reports (dry run by default) or deletes the Chrome, Edge and Firefox disk cache of every user, never touching cookies, history, passwords or extensions; exits 0, or 1 on an unexpected error.",
+    "shell": "powershell",
+    "category": "Cleanup",
+    "args": [],
+    "env": [],
+    "syntax": "[-DryRun:$false]",
+    "default_timeout": 600,
     "supported_platforms": [
       "windows"
     ],
@@ -99,6 +253,86 @@
     "env": [],
     "syntax": "[-Drive <letter>] [-MinFreePercent <int>] [-MinFreeGB <int>]",
     "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "f2d15b5e-905a-43d3-936c-20c928525ae4",
+    "filename": "maintenance/Clear-PrintQueue.ps1",
+    "name": "Maintenance - Clear print queue",
+    "description": "Action that lists print jobs per printer and, with -DryRun:$false, stops the Spooler, deletes the spool files and always starts it again (optionally only when a job is stuck); exits 0 OK, 1 on failure, 3 when the Spooler is absent.",
+    "shell": "powershell",
+    "category": "Maintenance",
+    "args": [],
+    "env": [],
+    "syntax": "[-OnlyStuck] [-StuckMinutes <int>] [-DryRun:$false]",
+    "default_timeout": 180,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "14028b19-367f-430f-b2d4-f8780278988a",
+    "filename": "maintenance/Repair-SystemFiles.ps1",
+    "name": "Maintenance - System file repair",
+    "description": "Check (DISM ScanHealth and sfc /verifyonly) or, with -Repair, action (DISM RestoreHealth and sfc /scannow) for Windows system file corruption, never rebooting; exits 0 healthy or repaired, 2 corruption found or reboot needed, 1 not repaired or error.",
+    "shell": "powershell",
+    "category": "Maintenance",
+    "args": [],
+    "env": [],
+    "syntax": "[-Repair]",
+    "default_timeout": 3600,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e2117acd-d1eb-42ac-882a-bc7137a3fe6b",
+    "filename": "maintenance/Test-TimeSync.ps1",
+    "name": "Maintenance - Time synchronization",
+    "description": "Check of the Windows Time service, time source, last sync and clock offset (one NTP sample), optionally forcing a resync with -Resync; exits 1 when the offset exceeds the maximum or the service is stopped, 2 when the last sync is older than 7 days, 3 when W32Time is absent, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Maintenance",
+    "args": [],
+    "env": [],
+    "syntax": "[-MaxOffsetSeconds <int>] [-Reference <string>] [-Resync]",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "d3a670dc-bef0-43e7-826d-2629ae799ad9",
+    "filename": "troubleshooting/Get-CrashHistory.ps1",
+    "name": "Troubleshooting - Crashes and unexpected shutdowns",
+    "description": "Check of blue screens (bug check codes), unexpected shutdowns and minidumps of the last days plus the top crashing applications; exits 1 when incidents reach -FailCount, 2 when they reach -WarnCount, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Troubleshooting",
+    "args": [],
+    "env": [],
+    "syntax": "[-Days <int>] [-WarnCount <int>] [-FailCount <int>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "908d2c47-bd3b-47ac-b394-f739d72abfd3",
+    "filename": "troubleshooting/Get-EventLogErrors.ps1",
+    "name": "Troubleshooting - Event log errors",
+    "description": "Check that groups critical and error events of the System and Application logs in the last hours by source and event id (top 15); exits 2 when errors are found, 1 on critical events with -FailOnCritical, 0 when clean.",
+    "shell": "powershell",
+    "category": "Troubleshooting",
+    "args": [],
+    "env": [],
+    "syntax": "[-LogName <string>] [-Hours <int>] [-FailOnCritical]",
+    "default_timeout": 120,
     "supported_platforms": [
       "windows"
     ],
@@ -303,6 +537,86 @@
     "run_as_user": false
   },
   {
+    "guid": "bf3fb894-0bfe-4279-b20f-d7992115971a",
+    "filename": "network/Get-WifiStatus.ps1",
+    "name": "Network - Wi-Fi status",
+    "description": "Check of the Wi-Fi connection (SSID, BSSID, radio type, band, channel, signal and link rates, never saved keys); exits 2 when the signal is below -MinSignal, 1 when the adapter is not connected, 3 without Wi-Fi, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Network",
+    "args": [],
+    "env": [],
+    "syntax": "[-MinSignal <int>]",
+    "default_timeout": 30,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "4110f4a0-4b30-4cb7-b733-700da05c6a2a",
+    "filename": "security/Get-BrowserExtensions.ps1",
+    "name": "Security - Browser extensions",
+    "description": "Lists Chrome, Edge and Firefox extensions of every user profile (browser, user, name, id, version); as a check, exits 1 when an id in -BlockList is installed, else 0.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-BlockList <string[]>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "5044a7cb-8d43-41da-9c80-1ed6c30031f6",
+    "filename": "security/Test-DomainJoin.ps1",
+    "name": "Security - Domain and Entra join",
+    "description": "Check of the Active Directory and Microsoft Entra join state (dsregcmd and CIM) with the domain secure channel test; exits 1 when the secure channel is broken or the join given in -Require is missing, else 0.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-Require <None|Domain|Entra|Any>]",
+    "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "31a245cb-f5ed-45fa-8061-fad36f31af04",
+    "filename": "security/Get-ExpiringCertificates.ps1",
+    "name": "Security - Expiring certificates",
+    "description": "Check of machine certificates (LocalMachine My, optionally WebHosting and Remote Desktop) close to expiry, ignoring renewed and long-expired ones; exits 1 within -FailDays or expired, 2 within -WarnDays, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-WarnDays <int>] [-FailDays <int>] [-IgnoreExpiredAfterDays <int>] [-OnlyWithPrivateKey:$false] [-IncludeWebHosting] [-IncludeRemoteDesktop]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "2daa3881-cae8-4353-9001-d76d565d71d8",
+    "filename": "security/Get-FailedLogons.ps1",
+    "name": "Security - Failed logons",
+    "description": "Check of failed logons (event 4625) and lockouts (4740) in the last hours, grouped by account, source address, logon type and reason; exits 1 at -FailThreshold, 2 at -WarnThreshold, 3 when the Security log is not readable, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-Hours <int>] [-WarnThreshold <int>] [-FailThreshold <int>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
     "guid": "88daaf46-ca57-4f3a-9141-6a2e8139d2ac",
     "filename": "security/Test-FirewallProfiles.ps1",
     "name": "Security - Firewall profiles",
@@ -312,6 +626,38 @@
     "args": [],
     "env": [],
     "syntax": "[-Profiles <Domain|Private|Public[]>]",
+    "default_timeout": 60,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "e1a669f5-3c37-4f56-bb72-1e0ed17de49f",
+    "filename": "security/Test-HardeningBaseline.ps1",
+    "name": "Security - Hardening baseline",
+    "description": "Check that scores 12 hardening controls (UAC, LSA protection, Credential Guard, WDigest, LLMNR, NetBIOS, AutoRun, SMB signing, PowerShell 2.0, Guest, Remote Registry, script block logging) with one PASS/FAIL line each; exits 1 when the score is below -MinScorePercent, 2 when any control fails, 0 when all pass.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-MinScorePercent <int>] [-Skip <string[]>]",
+    "default_timeout": 120,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "c1fb9eba-e133-4be4-b828-445d596c49a9",
+    "filename": "security/Get-LocalAccountsAudit.ps1",
+    "name": "Security - Local accounts",
+    "description": "Check of local user accounts (enabled, last logon, password age and flags, Administrators membership); exits 1 when an enabled account does not require a password, 2 for never-expiring, old or inactive enabled accounts, 3 on a domain controller, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-MaxPasswordAgeDays <int>] [-MaxInactiveDays <int>]",
     "default_timeout": 60,
     "supported_platforms": [
       "windows"
@@ -361,6 +707,22 @@
     "env": [],
     "syntax": "",
     "default_timeout": 90,
+    "supported_platforms": [
+      "windows"
+    ],
+    "run_as_user": false
+  },
+  {
+    "guid": "b63e831f-5f1f-47fc-893b-ffbcb0aa73ef",
+    "filename": "security/Get-SuspiciousScheduledTasks.ps1",
+    "name": "Security - Suspicious scheduled tasks",
+    "description": "Check of non-Microsoft scheduled tasks running unsigned programs from user-writable paths, encoded or downloading PowerShell, hidden windows or mshta/rundll32/regsvr32 with URLs; exits 2 when a suspicious task is found, 1 on error, 0 otherwise.",
+    "shell": "powershell",
+    "category": "Security",
+    "args": [],
+    "env": [],
+    "syntax": "[-IncludeMicrosoft] [-Exclude <string[]>]",
+    "default_timeout": 120,
     "supported_platforms": [
       "windows"
     ],

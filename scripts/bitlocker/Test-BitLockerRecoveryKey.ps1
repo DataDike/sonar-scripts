@@ -64,18 +64,18 @@ try {
         if ($_.Exception.PSObject.Properties['NativeErrorCode']) { $code = [string]$_.Exception.NativeErrorCode }
         if ($code -match 'InvalidNamespace|InvalidClass' -or $msg -match 'Invalid namespace|Invalid class') {
             Write-Output 'INFO: BitLocker is not available on this system (no BitLocker WMI provider, e.g. Home edition)'
-            exit 3
+            $host.SetShouldExit(3); exit 3
         }
         if ($code -match 'AccessDenied' -or $msg -match 'Access (is )?denied') {
             Write-Output 'FAIL: access denied reading BitLocker status; run as SYSTEM or administrator'
-            exit 1
+            $host.SetShouldExit(1); exit 1
         }
         throw
     }
 
     $os = $volumes | Where-Object { $_.VolumeType -eq 0 } | Select-Object -First 1
     if (-not $os) { $os = $volumes | Where-Object { $_.DriveLetter -eq $env:SystemDrive } | Select-Object -First 1 }
-    if (-not $os) { Write-Output 'INFO: OS volume not reported by BitLocker'; exit 3 }
+    if (-not $os) { Write-Output 'INFO: OS volume not reported by BitLocker'; $host.SetShouldExit(3); exit 3 }
     $drive = if ($os.DriveLetter) { $os.DriveLetter } else { $env:SystemDrive }
 
     $conv = (Invoke-CimMethod -InputObject $os -MethodName GetConversionStatus).ConversionStatus
@@ -85,11 +85,11 @@ try {
 
     if ([int]$conv -eq 0 -and $allIds.Count -eq 0) {
         Write-Output ("INFO: OS volume {0} is not encrypted and has no key protector; nothing to back up" -f $drive)
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
     if ($rpCount -eq 0) {
         Write-Output ("FAIL: OS volume {0} has no recovery password protector ({1} other protector(s))" -f $drive, $allIds.Count)
-        exit 1
+        $host.SetShouldExit(1); exit 1
     }
     $lines.Add(("OK: OS volume {0} has {1} recovery password protector(s)" -f $drive, $rpCount))
 
@@ -151,4 +151,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

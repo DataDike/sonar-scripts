@@ -115,4 +115,4 @@ catch {
     Write-Line ('FAIL: could not read firewall profiles: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

@@ -61,17 +61,17 @@ try {
     if ($letter) {
         if ($letter -notmatch '^[A-Z]$') {
             Write-Output ("FAIL: invalid -Drive value; use a single letter such as C")
-            exit 1
+            $host.SetShouldExit(1); exit 1
         }
         $disks = @($disks | Where-Object { ([string]$_.DeviceID).ToUpper() -eq ($letter + ':') })
         if ($disks.Count -eq 0) {
             Write-Output ("INFO: drive {0}: is not a local fixed drive on this machine" -f $letter)
-            exit 3
+            $host.SetShouldExit(3); exit 3
         }
     }
     if ($disks.Count -eq 0) {
         Write-Output "INFO: no local fixed drive with a drive letter found"
-        exit 3
+        $host.SetShouldExit(3); exit 3
     }
 
     $fails = 0; $warns = 0
@@ -107,4 +107,4 @@ catch {
     Write-Output ("FAIL: " + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

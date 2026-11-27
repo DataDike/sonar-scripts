@@ -67,7 +67,7 @@ foreach ($item in $AlertOnPort) {
         if (-not $tok) { continue }
         $v = 0
         if ([int]::TryParse($tok, [ref]$v) -and $v -ge 1 -and $v -le 65535) { $alertPorts += $v }
-        else { Write-Line ('FAIL: invalid port in -AlertOnPort: ' + $tok); exit 1 }
+        else { Write-Line ('FAIL: invalid port in -AlertOnPort: ' + $tok); $host.SetShouldExit(1); exit 1 }
     }
 }
 
@@ -160,4 +160,4 @@ catch {
     Write-Line ('FAIL: ' + $_.Exception.Message)
     $exitCode = 1
 }
-exit $exitCode
+$host.SetShouldExit($exitCode); exit $exitCode

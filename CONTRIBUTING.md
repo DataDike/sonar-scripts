@@ -47,7 +47,9 @@ production code. Start from [`templates/script-template.ps1`](templates/script-t
 - Scripts that delete or reset something take `-DryRun` and **default to dry run**.
 - Never reboot unless `-AllowReboot` is passed.
 - Idempotent: running twice must be harmless.
-- `$ErrorActionPreference = 'Stop'` plus `try/catch`; always end with an explicit `exit <code>`.
+- `$ErrorActionPreference = 'Stop'` plus `try/catch`; always end with an explicit exit code, written as
+  `$host.SetShouldExit($code); exit $code`. SONAR runs scripts without `-File`, and in that mode a plain
+  `exit 2` reaches the console as `1`.
 
 ## Adding a script
 1. Copy the template to `scripts/<category>/<Verb-Noun>.ps1`.
@@ -55,7 +57,7 @@ production code. Start from [`templates/script-template.ps1`](templates/script-t
    **Never change or reuse a GUID**: it is how SONAR knows the script across versions.
 3. Add the entry to [`sonar_scripts.json`](sonar_scripts.json).
 4. Run `powershell -File tools/validate.ps1` (Windows PowerShell 5.1) and fix every finding.
-5. Open a pull request. Two reviews are required; releases are signed tags (`vX.Y.Z`).
+5. Open a pull request. One review and a green CI run are required; releases are tags (`vX.Y.Z`).
 
 ## Manifest entry
 ```json
