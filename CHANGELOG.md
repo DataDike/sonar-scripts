@@ -1,5 +1,8 @@
 # Changelog
 
+## v1.1.1 (2026-11-27)
+- Security - Domain and Entra join: internal helper renamed to pass PSScriptAnalyzer (no behaviour change).
+
 ## v1.1.0 (2026-11-27)
 - 22 new scripts (45 in total) and 3 new categories:
   - Hardware: disk health, battery health.

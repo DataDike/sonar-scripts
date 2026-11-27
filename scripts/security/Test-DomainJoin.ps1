@@ -23,7 +23,7 @@
 .NOTES
     Name:       Security - Domain and Entra join
     GUID:       5044a7cb-8d43-41da-9c80-1ed6c30031f6
-    Version:    1.0.0
+    Version:    1.0.1
     Author:     DataDike
     License:    MIT
     Platforms:  windows
@@ -31,6 +31,7 @@
     Exit codes: 0 OK | 1 FAIL (secure channel broken, required join missing, or error)
     Changelog:
         1.0.0 (2026-11-27) First release.
+        1.0.1 (2026-11-27) Internal helper renamed (analyzer rule).
 
 .LINK
     https://github.com/DataDike/sonar-scripts
@@ -70,11 +71,11 @@ try {
     }
     else { $dsNote = 'dsregcmd not available on this Windows' }
 
-    function Get-Ds([string]$Key) { if ($ds.ContainsKey($Key)) { return [string]$ds[$Key] } return '' }
+    function Get-DsregValue([string]$Key) { if ($ds.ContainsKey($Key)) { return [string]$ds[$Key] } return '' }
 
     $cs = Get-CimInstance -ClassName Win32_ComputerSystem -Property PartOfDomain, Domain, Workgroup -ErrorAction Stop
     $inDomain = [bool]$cs.PartOfDomain
-    $entra = ((Get-Ds 'AzureAdJoined') -eq 'YES')
+    $entra = ((Get-DsregValue 'AzureAdJoined') -eq 'YES')
     $hybrid = ($entra -and $inDomain)
 
     # Secure channel
@@ -115,13 +116,13 @@ try {
     if ($inDomain) { Write-Line ('INFO: domain {0} | secure channel {1}' -f $cs.Domain, $channel) }
     else { Write-Line ('INFO: workgroup {0}' -f $cs.Workgroup) }
     if ($ds.Count) {
-        Write-Line ('INFO: AzureAdJoined={0} DomainJoined={1} EnterpriseJoined={2} WorkplaceJoined={3}' -f (Get-Ds 'AzureAdJoined'), (Get-Ds 'DomainJoined'), (Get-Ds 'EnterpriseJoined'), (Get-Ds 'WorkplaceJoined'))
-        $tenant = Get-Ds 'TenantName'
-        if (-not $tenant) { $tenant = Get-Ds 'WorkplaceTenantName' }
-        $devId = Get-Ds 'DeviceId'
+        Write-Line ('INFO: AzureAdJoined={0} DomainJoined={1} EnterpriseJoined={2} WorkplaceJoined={3}' -f (Get-DsregValue 'AzureAdJoined'), (Get-DsregValue 'DomainJoined'), (Get-DsregValue 'EnterpriseJoined'), (Get-DsregValue 'WorkplaceJoined'))
+        $tenant = Get-DsregValue 'TenantName'
+        if (-not $tenant) { $tenant = Get-DsregValue 'WorkplaceTenantName' }
+        $devId = Get-DsregValue 'DeviceId'
         if ($devId.Length -gt 8) { $devId = $devId.Substring(0, 8) + '...' }
-        $mdm = if ((Get-Ds 'MdmUrl')) { 'yes' } else { 'no' }
-        $prt = Get-Ds 'AzureAdPrt'
+        $mdm = if ((Get-DsregValue 'MdmUrl')) { 'yes' } else { 'no' }
+        $prt = Get-DsregValue 'AzureAdPrt'
         Write-Line ('INFO: tenant {0} | DeviceId {1} | MDM URL set {2} | AzureAdPrt {3}' -f $(if ($tenant) { $tenant } else { '-' }), $(if ($devId) { $devId } else { '-' }), $mdm, $(if ($prt) { $prt } else { '-' }))
     }
     if ($dsNote) { Write-Line ('INFO: ' + $dsNote) }
